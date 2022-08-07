@@ -1,9 +1,45 @@
-import React from 'react';
-import styled from 'styled-components';
-import { MdSearch } from 'react-icons/md';
-import { GithubContext } from '../context/context';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { MdSearch } from "react-icons/md";
+import { useGlobalContext } from "../context/context";
 const Search = () => {
-  return <h2>search component</h2>;
+  const [user, setUser] = useState("");
+  const { requests, error, searchGithubUser } = useGlobalContext();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!user) return;
+
+    searchGithubUser(user);
+  };
+
+  return (
+    <section className="section">
+      <Wrapper className="section-center">
+        {error.show && (
+          <ErrorWrapper>
+            <p>{error.msg}</p>
+          </ErrorWrapper>
+        )}
+        <form onSubmit={handleSubmit}>
+          <div className="form-control">
+            <MdSearch />
+            <input
+              type="text"
+              placeholder="enter github user"
+              onChange={(e) => setUser(e.target.value)}
+              value={user}
+            />
+            <button type="submit" disabled={requests === 0}>
+              Search
+            </button>
+          </div>
+        </form>
+        <h3>Requests: {requests}/60</h3>
+      </Wrapper>
+    </section>
+  );
 };
 
 const Wrapper = styled.div`
@@ -50,6 +86,18 @@ const Wrapper = styled.div`
       &:hover {
         background: var(--clr-primary-8);
         color: var(--clr-primary-1);
+      }
+      &:disabled,
+      &[disabled="disabled"] {
+        background-color: #555;
+        color: #999;
+        cursor: not-allowed;
+      }
+      &:disabled:hover,
+      &[disabled="disabled"]:hover {
+        background-color: #555;
+        color: #999;
+        cursor: not-allowed;
       }
     }
 
