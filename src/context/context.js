@@ -23,9 +23,33 @@ const GithubProvider = ({ children }) => {
 
     try {
       const res = await axios(`${rootUrl}/users/${user}`);
+      const { data } = res;
 
       if (res) {
-        setGithubUser(res.data);
+        setGithubUser(data);
+
+        const { login, followers_url } = data;
+
+        await Promise.allSettled([
+          axios(`${rootUrl}/users/${login}/repos?per_page=100`),
+          axios(`${followers_url}?per_page=100`),
+        ])
+          .then((results) => {
+            const [userRepos, userFollowers] = results;
+            const status = "fulfilled";
+
+            if (userRepos.status === status) {
+              setRepos(userRepos.value.data);
+            }
+
+            if (userFollowers.status === status) {
+              setFollowers(userFollowers.value.data);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            toggleError(true, err.message);
+          });
       } else {
         toggleError(true, "User does not exist");
       }
