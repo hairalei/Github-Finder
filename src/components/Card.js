@@ -1,10 +1,47 @@
 import React from "react";
-import { GithubContext } from "../context/context";
+import { useGlobalContext } from "../context/context";
 import styled from "styled-components";
 import { MdBusiness, MdLocationOn, MdLink } from "react-icons/md";
 
 const Card = () => {
-  return <h2>card component</h2>;
+  const { githubUser } = useGlobalContext();
+  const {
+    avatar_url,
+    html_url,
+    name,
+    company,
+    blog,
+    bio,
+    location,
+    twitter_username,
+  } = githubUser;
+
+  return (
+    <Wrapper>
+      <header>
+        <img src={avatar_url} alt={name} />
+        <div>
+          <h4>{name}</h4>
+          <p>{twitter_username && `@${twitter_username}`}</p>
+        </div>
+        <a href={html_url}>Follow</a>
+        <p className="bio">{bio}</p>
+        <div className="links">
+          <p>
+            <MdBusiness />
+            {company || "N/A"}
+          </p>
+          <p>
+            <MdLocationOn />
+            {location || "Earth"}
+          </p>
+          <a href={`https://${blog}`}>
+            <MdLink /> {blog}
+          </a>
+        </div>
+      </header>
+    </Wrapper>
+  );
 };
 
 const Wrapper = styled.article`
@@ -51,7 +88,6 @@ const Wrapper = styled.article`
       border: 1px solid var(--clr-primary-5);
       padding: 0.25rem 0.75rem;
       border-radius: 1rem;
-      text-transform: capitalize;
       letter-spacing: var(--spacing);
       transition: var(--transition);
       cursor: pointer;
