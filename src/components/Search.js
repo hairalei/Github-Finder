@@ -4,12 +4,12 @@ import { MdSearch } from "react-icons/md";
 import { useGlobalContext } from "../context/context";
 const Search = () => {
   const [user, setUser] = useState("");
-  const { requests, error, searchGithubUser } = useGlobalContext();
+  const { requests, error, searchGithubUser, isLoading } = useGlobalContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!user) return;
+    if (!user || isLoading) return;
 
     searchGithubUser(user);
   };
@@ -31,9 +31,11 @@ const Search = () => {
               onChange={(e) => setUser(e.target.value)}
               value={user}
             />
-            <button type="submit" disabled={requests === 0}>
-              Search
-            </button>
+            {!isLoading && (
+              <button type="submit" disabled={requests === 0}>
+                Search
+              </button>
+            )}
           </div>
         </form>
         <h3>Requests: {requests}/60</h3>

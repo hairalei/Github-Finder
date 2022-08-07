@@ -15,11 +15,12 @@ const GithubProvider = ({ children }) => {
 
   const [requests, setRequests] = useState(0);
   const [error, setError] = useState({ show: false, msg: "" });
-  const [loading, isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchGithubUser = async (user) => {
     toggleError();
-    // setLoading(true)
+    setIsLoading(true);
+
     try {
       const res = await axios(`${rootUrl}/users/${user}`);
 
@@ -30,8 +31,12 @@ const GithubProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       toggleError(true, "User does not exist");
     }
+
+    checkRequests();
+    setIsLoading(false);
   };
 
   //Check rate
@@ -70,6 +75,7 @@ const GithubProvider = ({ children }) => {
         requests,
         error,
         searchGithubUser,
+        isLoading,
       }}
     >
       {children}
