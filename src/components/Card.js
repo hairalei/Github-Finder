@@ -114,6 +114,7 @@ const Wrapper = styled.article`
     a {
       color: var(--clr-primary-5);
       transition: var(--transition);
+      max-width: fit-content;
       svg {
         color: var(--clr-grey-5);
       }
