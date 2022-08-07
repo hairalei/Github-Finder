@@ -121,7 +121,7 @@ const Wrapper = styled.div`
   }
   h3 {
     margin-bottom: 0;
-    color: var(--clr-grey-5);
+    color: var(--clr-grey-10);
     font-weight: 400;
   }
 `;
